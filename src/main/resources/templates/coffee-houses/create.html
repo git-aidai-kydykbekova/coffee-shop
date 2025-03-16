@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Coffee House</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+        :root {
+            --coffee-brown: #6F4E37;
+            --coffee-cream: #FFF1E6;
+            --coffee-light: #DDBEA9;
+            --coffee-dark: #3F2A1D;
+            --coffee-accent: #CB997E;
+        }
+
+        body {
+            background-color: var(--coffee-cream);
+            font-family: 'Georgia', serif;
+            color: var(--coffee-dark);
+        }
+
+        .navbar {
+            background-color: var(--coffee-dark) !important;
+        }
+
+        .navbar-brand {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.8rem;
+        }
+
+        .btn-coffee {
+            background-color: var(--coffee-brown);
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-coffee:hover {
+            background-color: var(--coffee-dark);
+            color: white;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: var(--coffee-brown);
+            color: white;
+            border-top-left-radius: 0.5rem !important;
+            border-top-right-radius: 0.5rem !important;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--coffee-accent);
+            box-shadow: 0 0 0 0.25rem rgba(203, 153, 126, 0.25);
+        }
+
+        .alert-coffee-danger {
+            background-color: #F8D7DA;
+            border-color: var(--coffee-accent);
+            color: var(--coffee-dark);
+        }
+
+        .is-invalid {
+            border-color: #dc3545;
+        }
+
+        .invalid-feedback {
+            color: #dc3545;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">CoffeeBrew Manager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link active" href="/coffees"><i class="fas fa-coffee"></i> Coffees</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/suppliers"><i class="fas fa-truck"></i> Suppliers</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/inventory"><i class="fas fa-boxes"></i> Inventory</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/coffee-houses"><i class="fas fa-house"></i> Coffee houses</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/merchandise-inventory"><i class="fas fa-box"></i> Merchandise Inventory</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="fas fa-plus"></i> Add New Coffee House</h4>
+                </div>
+                <div class="card-body">
+                    <div th:if="${errorMessage}" class="alert alert-coffee-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span th:text="${errorMessage}"></span>
+                    </div>
+
+                    <form th:action="@{/coffee-houses}" th:object="${coffeeHouse}" method="post">
+                        <div class="mb-3">
+                            <label for="storeId" class="form-label">Store ID</label>
+                            <input type="number" class="form-control" id="storeId" th:field="*{storeId}"
+                                   th:classappend="${#fields.hasErrors('storeId')} ? 'is-invalid' : ''">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('storeId')}" th:errors="*{storeId}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" th:field="*{city}"
+                                   th:classappend="${#fields.hasErrors('city')} ? 'is-invalid' : ''">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="coffee" class="form-label">Coffee Sales</label>
+                            <input type="number" class="form-control" id="coffee" th:field="*{coffee}">
+                            <small class="text-muted">Enter the number of coffee sales for this location.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="merch" class="form-label">Merchandise Sales</label>
+                            <input type="number" class="form-control" id="merch" th:field="*{merch}">
+                            <small class="text-muted">Enter the number of merchandise sales for this location.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="total" class="form-label">Total Sales (Optional)</label>
+                            <input type="number" class="form-control" id="total" th:field="*{total}">
+                            <small class="text-muted">If left empty, total will be calculated as the sum of coffee and merchandise sales.</small>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a th:href="@{/coffee-houses}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-coffee">
+                                <i class="fas fa-save"></i> Save Coffee House
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
