@@ -1,6 +1,7 @@
 package kg.nurtelecom.coffee_sale.controller.api;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import kg.nurtelecom.coffee_sale.payload.request.CoffeeHouseRequest;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/coffee-houses")
+@Tag(name = "Coffee House API", description = "Управление кофейнями")
 public class CoffeeHouseRestController {
     private static final Logger log = LoggerFactory.getLogger(CoffeeHouseRestController.class);
 
@@ -26,6 +28,7 @@ public class CoffeeHouseRestController {
         this.coffeeHouseService = coffeeHouseService;
     }
 
+    @Operation(summary = "Получить список всех кофеен", description = "Возвращает список всех кофеен, доступных в системе.")
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<List<CoffeeHouseResponse>> getAllCoffeeHouses() {
@@ -44,6 +47,7 @@ public class CoffeeHouseRestController {
         }
     }
 
+    @Operation(summary = "Получить кофейню по ID", description = "Возвращает данные о кофейне по указанному ID.")
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<CoffeeHouseResponse> getCoffeeHouseById(@PathVariable @NotNull Integer id) {
@@ -56,6 +60,7 @@ public class CoffeeHouseRestController {
         }
     }
 
+    @Operation(summary = "Создать новую кофейню", description = "Добавляет новую кофейню в систему.")
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<String> createCoffeeHouse(@Valid @RequestBody CoffeeHouseRequest coffeeHouseRequest) {
@@ -69,6 +74,7 @@ public class CoffeeHouseRestController {
         }
     }
 
+    @Operation(summary = "Обновить кофейню", description = "Обновляет информацию о кофейне по указанному ID.")
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<String> updateCoffeeHouse(
@@ -84,6 +90,7 @@ public class CoffeeHouseRestController {
         }
     }
 
+    @Operation(summary = "Удалить кофейню", description = "Удаляет кофейню по указанному ID.")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<String> deleteCoffeeHouse(@PathVariable @NotNull Integer id) {

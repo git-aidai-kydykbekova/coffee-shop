@@ -1,6 +1,7 @@
 package kg.nurtelecom.coffee_sale.controller.api;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import kg.nurtelecom.coffee_sale.payload.request.MerchandiseInventoryRequest;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/merchandise-inventory")
+@Tag(name = "Merchandise Inventory Management", description = "Операции по управлению инвентарем товаров")
 public class MerchandiseInventoryRestController {
     private static final Logger log = LoggerFactory.getLogger(MerchandiseInventoryRestController.class);
 
@@ -28,6 +30,7 @@ public class MerchandiseInventoryRestController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Получить все товары инвентаря", description = "Возвращает список всех доступных товаров в инвентаре")
     public ResponseEntity<List<MerchandiseInventoryResponse>> getAllInventoryItems() {
         try {
             List<MerchandiseInventoryResponse> inventoryItems = merchandiseInventoryService.findAll();
@@ -46,6 +49,7 @@ public class MerchandiseInventoryRestController {
 
     @GetMapping("/{itemId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Получить товар по ID", description = "Возвращает информацию о товаре в инвентаре по его ID")
     public ResponseEntity<MerchandiseInventoryResponse> getInventoryItemById(
             @PathVariable @Valid @NotBlank String itemId) {
         try {
@@ -59,6 +63,7 @@ public class MerchandiseInventoryRestController {
 
     @GetMapping("/supplier/{supId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Получить товары по поставщику", description = "Возвращает список товаров инвентаря по ID поставщика")
     public ResponseEntity<List<MerchandiseInventoryResponse>> getInventoryItemsBySupplier(
             @PathVariable Integer supId) {
         try {
@@ -78,6 +83,7 @@ public class MerchandiseInventoryRestController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Добавить новый товар в инвентарь", description = "Создает новый товар в инвентаре")
     public ResponseEntity<String> createInventoryItem(@Valid @RequestBody MerchandiseInventoryRequest inventoryRequest) {
         try {
             merchandiseInventoryService.create(inventoryRequest);
@@ -91,6 +97,7 @@ public class MerchandiseInventoryRestController {
 
     @PutMapping("/{itemId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Обновить информацию о товаре в инвентаре", description = "Обновляет информацию о товаре по его ID")
     public ResponseEntity<String> updateInventoryItem(
             @PathVariable @Valid @NotBlank String itemId,
             @Valid @RequestBody MerchandiseInventoryRequest inventoryRequest) {
@@ -106,6 +113,7 @@ public class MerchandiseInventoryRestController {
 
     @DeleteMapping("/{itemId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Удалить товар из инвентаря", description = "Удаляет товар из инвентаря по ID")
     public ResponseEntity<String> deleteInventoryItem(
             @PathVariable @Valid @NotBlank String itemId) {
         try {

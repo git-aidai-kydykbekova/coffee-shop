@@ -1,6 +1,7 @@
 package kg.nurtelecom.coffee_sale.controller.api;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import kg.nurtelecom.coffee_sale.payload.request.SupplierRequest;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/suppliers")
+@Tag(name = "Supplier Management", description = "Операции по управлению поставщиками")
 public class SupplierRestController {
     private static final Logger log = LoggerFactory.getLogger(SupplierRestController.class);
 
@@ -28,6 +30,7 @@ public class SupplierRestController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Получить всех поставщиков", description = "Возвращает список всех поставщиков")
     public ResponseEntity<List<SupplierResponse>> getAllSuppliers() {
         try {
             List<SupplierResponse> suppliers = supplierService.findAll();
@@ -46,6 +49,7 @@ public class SupplierRestController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Получить поставщика по ID", description = "Возвращает информацию о поставщике по его ID")
     public ResponseEntity<SupplierResponse> getSupplierById(@PathVariable @NotNull Integer id) {
         try {
             SupplierResponse supplier = supplierService.findById(id);
@@ -58,6 +62,7 @@ public class SupplierRestController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Добавить нового поставщика", description = "Создает нового поставщика")
     public ResponseEntity<String> createSupplier(@Valid @RequestBody SupplierRequest supplierRequest) {
         try {
             supplierService.create(supplierRequest);
@@ -71,6 +76,7 @@ public class SupplierRestController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Обновить информацию о поставщике", description = "Обновляет информацию о поставщике по его ID")
     public ResponseEntity<String> updateSupplier(
             @PathVariable @NotNull Integer id,
             @Valid @RequestBody SupplierRequest supplierRequest) {
@@ -86,6 +92,7 @@ public class SupplierRestController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Удалить поставщика", description = "Удаляет поставщика по его ID")
     public ResponseEntity<String> deleteSupplier(@PathVariable @NotNull Integer id) {
         try {
             supplierService.delete(id);

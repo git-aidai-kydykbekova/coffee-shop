@@ -1,6 +1,7 @@
 package kg.nurtelecom.coffee_sale.controller.api;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kg.nurtelecom.coffee_sale.payload.request.CoffeeInventoryRequest;
 import kg.nurtelecom.coffee_sale.payload.respone.CoffeeInventoryResponse;
@@ -16,9 +17,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/inventory")
+@Tag(name = "Coffee Inventory", description = "Управление запасами кофе")
 public class CoffeeInventoryRestController {
     private static final Logger log = LoggerFactory.getLogger(CoffeeInventoryRestController.class);
-
     private final CoffeeInventoryService coffeeInventoryService;
 
     public CoffeeInventoryRestController(CoffeeInventoryService coffeeInventoryService) {
@@ -27,6 +28,7 @@ public class CoffeeInventoryRestController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Получить все запасы", description = "Возвращает список всех запасов кофе")
     public ResponseEntity<List<CoffeeInventoryResponse>> getAllInventory() {
         try {
             List<CoffeeInventoryResponse> inventoryList = coffeeInventoryService.findAll();
@@ -45,6 +47,7 @@ public class CoffeeInventoryRestController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Получить запасы по ID", description = "Возвращает информацию о запасах кофе по заданному ID")
     public ResponseEntity<CoffeeInventoryResponse> getInventoryById(@PathVariable Long id) {
         try {
             CoffeeInventoryResponse inventory = coffeeInventoryService.findById(id);
@@ -57,6 +60,7 @@ public class CoffeeInventoryRestController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Создать запись о запасах", description = "Добавляет новую запись о запасах кофе")
     public ResponseEntity<String> createInventory(@Valid @RequestBody CoffeeInventoryRequest request) {
         try {
             coffeeInventoryService.create(request);
@@ -70,6 +74,7 @@ public class CoffeeInventoryRestController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Обновить запись о запасах", description = "Обновляет существующую запись о запасах кофе по ID")
     public ResponseEntity<String> updateInventory(
             @PathVariable Long id,
             @Valid @RequestBody CoffeeInventoryRequest request) {
@@ -85,6 +90,7 @@ public class CoffeeInventoryRestController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @Operation(summary = "Удалить запись о запасах", description = "Удаляет запись о запасах кофе по ID")
     public ResponseEntity<String> deleteInventory(@PathVariable Long id) {
         try {
             coffeeInventoryService.delete(id);

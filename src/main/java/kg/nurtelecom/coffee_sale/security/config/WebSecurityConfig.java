@@ -58,6 +58,7 @@ public class WebSecurityConfig {
         http.logout(logout -> logout
                 .logoutUrl("/logout")
                 .permitAll());
+//        http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
