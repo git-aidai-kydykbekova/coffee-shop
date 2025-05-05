@@ -51,6 +51,8 @@ The Coffee Shop system will provide CRUD (Create, Read, Update, Delete) function
 
 ### 1.3 Definitions, Acronyms, and Abbreviations
 - **JPA**: Java Persistence API
+- - **JWT** – JSON Web Token
+- **OTP** – One-Time Password
 - **CRUD**: Create, Read, Update, Delete
 - **REST**: Representational State Transfer
 - **H2**: A relational database management system (in-memory)
@@ -91,6 +93,7 @@ The system follows the **MVC (Model-View-Controller)** design pattern. The **Mod
 - **Server**: Tomcat (Embedded with Spring Boot)
 - **Authentication**: Spring Security
 - **Version Control**: Git
+- - **Security**: JWT (access/refresh tokens), Spring Security, Email verification
 - **Development Environment**: IntelliJ IDEA, Postman (for API testing)
 
 ---
@@ -169,6 +172,11 @@ The system follows the **MVC (Model-View-Controller)** design pattern. The **Mod
 ### 5.4 Security
 - User data should be stored securely (passwords must be hashed).
 - Role-based access control must be implemented to ensure that only authorized users can access certain functionalities.
+- - Email confirmation is required before login using a 6-digit OTP code
+- JWT tokens for secure authentication and authorization
+- Refresh tokens to allow session continuation without re-login
+- Passwords are hashed and stored securely
+- Role-based access control enforced via Spring Security
 
 ---
 
@@ -183,6 +191,12 @@ All entities (Coffee, Coffeehouse, Inventory, Merchandise, Supplier, User) will 
 - **PUT**: Update existing records (e.g., update inventory or user info).
 - **DELETE**: Delete records (e.g., remove a coffee or supplier).
 
+### 6.3 Authentication System
+
+- **Registration**: Requires email confirmation via one-time code
+- **Login**: Issues JWT access and refresh tokens
+- **Token Refresh**: Endpoint to refresh expired access tokens using a valid refresh token
+- **Logout**: Revokes tokens (if implemented)
 ---
 
 ## 7. Database Design
